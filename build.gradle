@@ -62,6 +62,7 @@ project(':module-common') {
 project(':module-user') {
     // 향후 user 모듈에만 필요한 라이브러리가 발생하면 이곳에 추가한다.
     dependencies {
+        implementation 'org.springframework.boot:spring-boot-starter-security'
         compile project(':module-common')
     }
 }
@@ -69,6 +70,7 @@ project(':module-user') {
 project(':module-board') {
     // 향후 board 모듈에만 필요한 라이브러리가 발생하면 이곳에 추가한다.
     dependencies {
+        implementation 'org.springframework.boot:spring-boot-starter-security'
         compile project(':module-common')
     }
 }

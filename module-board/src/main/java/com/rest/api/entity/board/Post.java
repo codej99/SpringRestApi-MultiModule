@@ -6,6 +6,7 @@ import com.rest.api.entity.common.CommonDateEntity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import com.rest.api.entity.board.Board;
 
 import javax.persistence.*;
 import java.io.Serializable;
