@@ -1,43 +1,74 @@
-plugins {
-    id 'org.springframework.boot' version '2.1.4.RELEASE'
-    id 'java'
-    id "org.sonarqube" version "2.7"
-}
+buildscript {
+    ext {
+        springBootVersion = '2.1.4.RELEASE'
+    }
+    repositories {
+        mavenCentral()
+    }
 
-apply plugin: 'io.spring.dependency-management'
-
-group = 'com.rest'
-version = '0.0.1-SNAPSHOT'
-sourceCompatibility = '8'
-
-configurations {
-    compileOnly {
-        extendsFrom annotationProcessor
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+        classpath "io.spring.gradle:dependency-management-plugin:0.6.0.RELEASE"
     }
 }
 
-repositories {
-    mavenCentral()
+subprojects {
+    apply plugin: 'java'
+    apply plugin: 'org.springframework.boot'
+    apply plugin: 'io.spring.dependency-management'
+
+    sourceCompatibility = 1.8
+
+    repositories {
+        mavenCentral()
+    }
+
+    configurations {
+        compileOnly {
+            extendsFrom annotationProcessor
+        }
+    }
+
+    // 모든 모듈에서 사용하는 라이브러리
+    dependencies {
+        implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+        implementation 'org.springframework.boot:spring-boot-starter-freemarker'
+        implementation 'org.springframework.boot:spring-boot-starter-web'
+        implementation 'org.springframework.boot:spring-boot-starter-actuator'
+        implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+        //embedded-redis
+        implementation 'it.ozimov:embedded-redis:0.7.2'
+        implementation 'io.springfox:springfox-swagger2:2.6.1'
+        implementation 'io.springfox:springfox-swagger-ui:2.6.1'
+        implementation 'net.rakugakibox.util:yaml-resource-bundle:1.1'
+        implementation 'com.google.code.gson:gson'
+        compileOnly 'org.projectlombok:lombok'
+        runtimeOnly 'com.h2database:h2'
+        runtimeOnly 'mysql:mysql-connector-java'
+        annotationProcessor 'org.projectlombok:lombok'
+        testImplementation 'org.springframework.security:spring-security-test'
+        testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    }
 }
 
-dependencies {
-    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-    implementation 'org.springframework.boot:spring-boot-starter-freemarker'
-    implementation 'org.springframework.boot:spring-boot-starter-web'
-    implementation 'org.springframework.boot:spring-boot-starter-security'
-    implementation 'org.springframework.boot:spring-boot-starter-actuator'
-    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
-    //embedded-redis
-    implementation 'it.ozimov:embedded-redis:0.7.2'
-    implementation 'io.jsonwebtoken:jjwt:0.9.1'
-    implementation 'io.springfox:springfox-swagger2:2.6.1'
-    implementation 'io.springfox:springfox-swagger-ui:2.6.1'
-    implementation 'net.rakugakibox.util:yaml-resource-bundle:1.1'
-    implementation 'com.google.code.gson:gson'
-    compileOnly 'org.projectlombok:lombok'
-    runtimeOnly 'com.h2database:h2'
-    runtimeOnly 'mysql:mysql-connector-java'
-    annotationProcessor 'org.projectlombok:lombok'
-    testImplementation 'org.springframework.security:spring-security-test'
-    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+project(':module-common') {
+    // 향후 common 모듈에만 필요한 라이브러리가 발생하면 이곳에 추가한다.
+    dependencies {
+        implementation 'org.springframework.boot:spring-boot-starter-security'
+        implementation 'io.jsonwebtoken:jjwt:0.9.1'
+    }
+}
+
+project(':module-user') {
+    // 향후 user 모듈에만 필요한 라이브러리가 발생하면 이곳에 추가한다.
+    dependencies {
+        compile project(':module-common')
+    }
+}
+
+project(':module-board') {
+    // 향후 board 모듈에만 필요한 라이브러리가 발생하면 이곳에 추가한다.
+    dependencies {
+        compile project(':module-common')
+    }
 }

@@ -4,3 +4,7 @@ pluginManagement {
     }
 }
 rootProject.name = 'api'
+include 'module-common'
+include 'module-board'
+include 'module-user'
+
